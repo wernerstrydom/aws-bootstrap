@@ -8,16 +8,13 @@ pipeline {
         pollSCM 'H/2 * * * *'
     }
     environment {
-        OKTA_API_TOKEN                    = credentials('okta-api-token')
-        OKTA_BASE_URL                     = credentials('okta-base-url')
-        OKTA_ORG_NAME                     = credentials('okta-org-name')
-        AWS_ACCESS_KEY_ID                 = credentials('aws-secret-key-id')
-        AWS_SECRET_ACCESS_KEY             = credentials('aws-secret-access-key')
-        TF_INPUT                          = 0
-        TF_IN_AUTOMATION                  = 'Jenkins'
-        TF_BACKEND_S3_BUCKET          = credentials('terraform-backend-s3-bucket')
-        TF_BACKEND_S3_REGION          = credentials('terraform-backend-s3-region')
-        TF_BACKEND_S3_DYNAMODB_TABLE  = credentials('terraform-backend-s3-dynamodb-table')
+        AWS_ACCESS_KEY_ID            = credentials('aws-secret-key-id')
+        AWS_SECRET_ACCESS_KEY        = credentials('aws-secret-access-key')
+        TF_INPUT                     = 0
+        TF_IN_AUTOMATION             = 'Jenkins'
+        TF_BACKEND_S3_BUCKET         = credentials('terraform-backend-s3-bucket')
+        TF_BACKEND_S3_REGION         = credentials('terraform-backend-s3-region')
+        TF_BACKEND_S3_DYNAMODB_TABLE = credentials('terraform-backend-s3-dynamodb-table')
     }
     stages {
         stage('Plan') {
@@ -30,7 +27,7 @@ pipeline {
                 sh './generate.sh'
                 sh 'tools/terraform -v'
                 sh 'tools/terraform init'
-                // sh 'tools/terraform apply -auto-approve'
+                sh 'tools/terraform apply -auto-approve'
             }
         }
     }
