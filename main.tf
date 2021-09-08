@@ -1,5 +1,4 @@
 provider "aws" {
-    version = "~> 2.0"
     region = "us-east-1"
 }
 
@@ -61,6 +60,14 @@ resource "aws_s3_bucket" "main" {
   }
 }
 
+resource "aws_s3_bucket_public_access_block" "main" {
+  bucket = aws_s3_bucket.main.id
+  restrict_public_buckets = true
+  block_public_acls   = true
+  block_public_policy = true
+  ignore_public_acls  = true
+}
+
 resource "aws_dynamodb_table" "main" {
   name = "wernerstrydom-terraform-locks"
   billing_mode = "PAY_PER_REQUEST"
@@ -88,6 +95,7 @@ output "aws_access_key_id" {
 
 output "aws_access_key_secret" {
   value = aws_iam_access_key.main.secret
+  sensitive = true
 }
 
 output "aws_s3_bucket_arn" {
